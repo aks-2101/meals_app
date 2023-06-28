@@ -5,12 +5,35 @@ import 'package:meals_app/widgets/category_grid_item.dart';
 import 'package:meals_app/models/category.dart';
 import 'package:meals_app/models/meal.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key,required this.onToggleFavorite,required this.availableMeals});
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key,required this.availableMeals});
 
-    final void Function(Meal meal) onToggleFavorite;
+    
     final List<Meal> availableMeals;
 
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProviderStateMixin{
+
+late AnimationController _animationController;
+
+@override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration:const Duration(milliseconds: 300,),
+      lowerBound: 0,
+      upperBound: 1,
+    );
+  }
+@override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void _selectCategory(BuildContext context, Category category) {
     final filteredMeal = dummyMeals
@@ -22,7 +45,7 @@ class CategoryScreen extends StatelessWidget {
         builder: (ctx) => MealsScreen(
           title: category.title,
           meals: filteredMeal,
-          onToggleFavorite: onToggleFavorite,
+          
         ),
       ),
     );
